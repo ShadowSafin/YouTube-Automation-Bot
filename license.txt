@@ -1,0 +1,23 @@
+## Limited Personal Use License
+
+**Copyright © 2024 ShadowSafin. All rights reserved.**
+
+By downloading or using this software (the "Software"), you agree to the following terms:
+
+### 1. Personal Use Only
+You are granted a non-exclusive, non-transferable, and revocable license to download and use the Software for **personal, non-commercial purposes only**.
+
+### 2. Restrictions
+You **may not**:
+- Distribute, share, publish, or make the Software or any part of it available to any third party.
+- Modify, alter, adapt, reverse engineer, or create derivative works of the Software.
+- Use the Software for any **commercial purposes**, including but not limited to selling, licensing, leasing, or using it as part of a commercial product or service.
+  
+### 3. Ownership
+The Software remains the exclusive property of ShadowSafin. This license does not transfer any ownership rights to you.
+
+### 4. No Warranty
+The Software is provided "as is," without any warranty, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, or non-infringement. In no event shall ShadowSafin be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the Software.
+
+### 5. Termination
+This license is effective until terminated. You may terminate it by deleting all copies of the Software in your possession. ShadowSafin reserves the right to terminate this license at any time, for any reason, without notice.
