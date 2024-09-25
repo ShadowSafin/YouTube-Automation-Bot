@@ -1,7 +1,7 @@
 import os
 import random
-import re  # For cleaning up file names
-import time  # For adding a delay after upload
+import re
+import time
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -13,11 +13,11 @@ DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive']
 YOUTUBE_SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 # Hardcoded Information
-DRIVE_CREDENTIALS_PATH = 'credentials.json'  # Update with your Google Drive credentials file path
-YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'  # Update with your YouTube client secrets file path
-SOURCE_FOLDER_ID = 'Source_Folder_ID'  # Update with the source folder ID in Google Drive
-DESTINATION_FOLDER_ID = 'Destination_Folder_ID'  # Update with the destination folder ID in Google Drive
-TAGS = ["tag1", "tag2", "tag3"]  # Update with relevant YouTube tags
+DRIVE_CREDENTIALS_PATH = 'credentials.json'
+YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'
+SOURCE_FOLDER_ID = 'your_source_folder_id'
+DESTINATION_FOLDER_ID = 'your_destination_folder_id'
+TAGS = ["tag1", "tag2", "tag3"]
 
 # Function to authenticate and get Google Drive service
 def authenticate_google_drive(drive_credentials_path):
@@ -29,10 +29,10 @@ def authenticate_google_drive(drive_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(drive_credentials_path, DRIVE_SCOPES)
-            creds = flow.run_local_server(port=80)
+            creds = flow.run_console()  # Changed to run_console()
         with open('token_drive.json', 'w') as token:
             token.write(creds.to_json())
-    
+
     service = build('drive', 'v3', credentials=creds)
     return service
 
@@ -46,10 +46,10 @@ def authenticate_youtube(youtube_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(youtube_credentials_path, YOUTUBE_SCOPES)
-            creds = flow.run_local_server(port=80)
+            creds = flow.run_console()  # Changed to run_console()
         with open('token_youtube.json', 'w') as token:
             token.write(creds.to_json())
-    
+
     service = build('youtube', 'v3', credentials=creds)
     return service
 
@@ -61,7 +61,7 @@ def get_random_file(service, folder_id):
         fields='nextPageToken, files(id, name)',
         pageSize=100
     ).execute()
-    
+
     items = results.get('files', [])
     if items:
         return random.choice(items)
@@ -83,38 +83,33 @@ def move_file_to_folder(service, file_id, target_folder_id):
 
 # Function to clean up file name for YouTube title
 def clean_file_name(file_name):
-    # Remove file extension
     title = os.path.splitext(file_name)[0]
-    # Replace invalid characters with a space
     title = re.sub(r'[<>:"/\\|?*\x00-\x1F]', '', title)
-    # Truncate to maximum allowed length (100 characters)
-    title = title[:100].strip()
-    
-    # Fallback title if the cleaned name is empty
-    return title if title else "Untitled Video"
+    title = title[:100]
+    return title.strip() or "Untitled Video"
 
 # Function to upload video to YouTube
 def upload_video_to_youtube(service, video_file_path, title, description, tags):
     body = {
         'snippet': {
-            'title': title,  # Title set as cleaned file name
-            'description': description,  # Description set as the cleaned file name
+            'title': title,
+            'description': description,
             'tags': tags,
-            'categoryId': '22'  # Category ID for People & Blogs
+            'categoryId': '22'  # Set category ID here
         },
         'status': {
             'privacyStatus': 'public',
-            'madeForKids': False  # Set this flag to False for "not made for kids"
+            'madeForKids': False
         }
     }
-    
+
     media = MediaFileUpload(video_file_path, chunksize=-1, resumable=True, mimetype='video/*')
     request = service.videos().insert(
         part="snippet,status",
         body=body,
         media_body=media
     )
-    
+
     response = None
     while response is None:
         status, response = request.next_chunk()
@@ -133,12 +128,10 @@ def main():
         file_name = random_file['name']
         file_id = random_file['id']
 
-        # Clean file name for YouTube title
         cleaned_file_name = clean_file_name(file_name)
 
         print(f"Random file selected: {cleaned_file_name}")
 
-        # Download the file from Google Drive
         file_request = drive_service.files().get_media(fileId=file_id)
         video_file_path = f"./{file_name}"
         with open(video_file_path, 'wb') as video_file:
@@ -146,30 +139,14 @@ def main():
             done = False
             while not done:
                 status, done = downloader.next_chunk()
-                if status:
-                    print(f"Download {int(status.progress() * 100)}% complete.")
 
-        # Attempt to upload to YouTube with error handling
         try:
             upload_video_to_youtube(youtube_service, video_file_path, cleaned_file_name, cleaned_file_name, TAGS)
         except Exception as e:
-            if 'quotaExceeded' in str(e):
-                print("Quota exceeded. Exiting process.")
-                return  # Exit after notifying of quota limit
-            else:
-                print(f"An error occurred: {e}")
+            print(f"An error occurred: {e}")
 
-        # Wait for 20 seconds after the video is uploaded
-        print("Waiting for 20 seconds after upload...")
-        time.sleep(20)
-
-        # Move the file to another folder after uploading
         move_file_to_folder(drive_service, file_id, DESTINATION_FOLDER_ID)
-
-        # Optionally delete the file after upload
-        os.remove(video_file_path)
-
-    print("Process completed.")
+        time.sleep(20)  # Wait for 20 seconds after uploading
 
 if __name__ == "__main__":
     main()
