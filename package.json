@@ -1,0 +1,14 @@
+{
+  "name": "youtube-automation",
+  "version": "1.0.0",
+  "description": "YouTube automation project",
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.x <=18.x"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  }
+}
