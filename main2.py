@@ -13,11 +13,11 @@ DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive']
 YOUTUBE_SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 # Hardcoded Information
-DRIVE_CREDENTIALS_PATH = 'credentials.json'
-YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'
-SOURCE_FOLDER_ID = 'your_source_folder_id'
-DESTINATION_FOLDER_ID = 'your_destination_folder_id'
-TAGS = ["tag1", "tag2", "tag3"]
+DRIVE_CREDENTIALS_PATH = 'credentials.json'  # Update with your Google Drive credentials file path
+YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'  # Update with your YouTube client secrets file path
+SOURCE_FOLDER_ID = 'your_source_folder_id'  # Update with the source folder ID in Google Drive
+DESTINATION_FOLDER_ID = 'your_destination_folder_id'  # Update with the destination folder ID in Google Drive
+TAGS = ["tag1", "tag2", "tag3"]  # Update with relevant YouTube tags
 
 # Function to authenticate and get Google Drive service
 def authenticate_google_drive(drive_credentials_path):
@@ -29,7 +29,7 @@ def authenticate_google_drive(drive_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(drive_credentials_path, DRIVE_SCOPES)
-            creds = flow.run_console()  # Changed to run_console()
+            creds = flow.run_local_server(port=8000)  # Run local server on port 8000
         with open('token_drive.json', 'w') as token:
             token.write(creds.to_json())
 
@@ -46,7 +46,7 @@ def authenticate_youtube(youtube_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(youtube_credentials_path, YOUTUBE_SCOPES)
-            creds = flow.run_console()  # Changed to run_console()
+            creds = flow.run_local_server(port=8000)  # Run local server on port 8000
         with open('token_youtube.json', 'w') as token:
             token.write(creds.to_json())
 
