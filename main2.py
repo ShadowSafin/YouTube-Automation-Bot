@@ -7,7 +7,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
-import socket
 
 # If modifying these SCOPES, delete the file token.json.
 DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive']
@@ -30,8 +29,7 @@ def authenticate_google_drive(drive_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(drive_credentials_path, DRIVE_SCOPES)
-            port = os.environ.get("PORT", 8000)  # Use PORT from environment variable or fallback to 8000
-            creds = flow.run_local_server(port=int(port))  # Run local server
+            creds = flow.run_local_server(host='0.0.0.0', port=10000)  # Run local server on host 0.0.0.0 and port 10000
         with open('token_drive.json', 'w') as token:
             token.write(creds.to_json())
 
@@ -48,8 +46,7 @@ def authenticate_youtube(youtube_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(youtube_credentials_path, YOUTUBE_SCOPES)
-            port = os.environ.get("PORT", 8000)  # Use PORT from environment variable or fallback to 8000
-            creds = flow.run_local_server(port=int(port))  # Run local server
+            creds = flow.run_local_server(host='0.0.0.0', port=10000)  # Run local server on host 0.0.0.0 and port 10000
         with open('token_youtube.json', 'w') as token:
             token.write(creds.to_json())
 
