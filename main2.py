@@ -29,7 +29,7 @@ def authenticate_google_drive():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(DRIVE_CREDENTIALS_PATH, DRIVE_SCOPES)
-            creds = flow.run_local_server(host='0.0.0.0', port=10000)
+            creds = flow.run_console()  # Change to run_console for headless environments
         with open('token_drive.json', 'w') as token:
             token.write(creds.to_json())
     return build('drive', 'v3', credentials=creds)
@@ -43,7 +43,7 @@ def authenticate_youtube():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(YOUTUBE_CREDENTIALS_PATH, YOUTUBE_SCOPES)
-            creds = flow.run_local_server(host='0.0.0.0', port=10000)
+            creds = flow.run_console()  # Change to run_console for headless environments
         with open('token_youtube.json', 'w') as token:
             token.write(creds.to_json())
     return build('youtube', 'v3', credentials=creds)
@@ -124,8 +124,7 @@ def automatic_upload():
 
 if __name__ == "__main__":
     try:
-        app.run(host='0.0.0.0', port=5000)
-        video_id = automatic_upload()
-        print(f"Video uploaded successfully. Video ID: {video_id}")
+        port = int(os.environ.get("PORT", 5000))
+        app.run(host='0.0.0.0', port=port)
     except Exception as e:
         print(f"An error occurred: {e}")
