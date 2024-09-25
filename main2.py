@@ -1,20 +1,21 @@
 import os
 import random
-import re
-import time
+import re  # For cleaning up file names
+import time  # For waiting after uploading
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
+import socket
 
 # If modifying these SCOPES, delete the file token.json.
 DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive']
 YOUTUBE_SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 # Hardcoded Information
-DRIVE_CREDENTIALS_PATH = 'credentials.json'  # Update with your Google Drive credentials file path
-YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'  # Update with your YouTube client secrets file path
+DRIVE_CREDENTIALS_PATH = 'path/to/drive/credentials.json'  # Update with your Google Drive credentials file path
+YOUTUBE_CREDENTIALS_PATH = 'path/to/youtube/client_secrets.json'  # Update with your YouTube client secrets file path
 SOURCE_FOLDER_ID = 'your_source_folder_id'  # Update with the source folder ID in Google Drive
 DESTINATION_FOLDER_ID = 'your_destination_folder_id'  # Update with the destination folder ID in Google Drive
 TAGS = ["tag1", "tag2", "tag3"]  # Update with relevant YouTube tags
@@ -29,7 +30,8 @@ def authenticate_google_drive(drive_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(drive_credentials_path, DRIVE_SCOPES)
-            creds = flow.run_local_server(port=8000)  # Run local server on port 8000
+            port = os.environ.get("PORT", 8000)  # Use PORT from environment variable or fallback to 8000
+            creds = flow.run_local_server(port=int(port))  # Run local server
         with open('token_drive.json', 'w') as token:
             token.write(creds.to_json())
 
@@ -46,7 +48,8 @@ def authenticate_youtube(youtube_credentials_path):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(youtube_credentials_path, YOUTUBE_SCOPES)
-            creds = flow.run_local_server(port=8000)  # Run local server on port 8000
+            port = os.environ.get("PORT", 8000)  # Use PORT from environment variable or fallback to 8000
+            creds = flow.run_local_server(port=int(port))  # Run local server
         with open('token_youtube.json', 'w') as token:
             token.write(creds.to_json())
 
@@ -95,7 +98,7 @@ def upload_video_to_youtube(service, video_file_path, title, description, tags):
             'title': title,
             'description': description,
             'tags': tags,
-            'categoryId': '22'  # Set category ID here
+            'categoryId': '24'  # Category ID for Entertainment
         },
         'status': {
             'privacyStatus': 'public',
@@ -129,7 +132,6 @@ def main():
         file_id = random_file['id']
 
         cleaned_file_name = clean_file_name(file_name)
-
         print(f"Random file selected: {cleaned_file_name}")
 
         file_request = drive_service.files().get_media(fileId=file_id)
@@ -139,6 +141,8 @@ def main():
             done = False
             while not done:
                 status, done = downloader.next_chunk()
+                if status:
+                    print(f"Download {int(status.progress() * 100)}% complete.")
 
         try:
             upload_video_to_youtube(youtube_service, video_file_path, cleaned_file_name, cleaned_file_name, TAGS)
@@ -146,7 +150,10 @@ def main():
             print(f"An error occurred: {e}")
 
         move_file_to_folder(drive_service, file_id, DESTINATION_FOLDER_ID)
-        time.sleep(20)  # Wait for 20 seconds after uploading
+        os.remove(video_file_path)
+        
+        # Wait for 20 seconds after uploading the video
+        time.sleep(20)
 
 if __name__ == "__main__":
     main()
