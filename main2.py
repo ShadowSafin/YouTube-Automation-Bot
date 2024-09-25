@@ -14,8 +14,8 @@ DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive']
 YOUTUBE_SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 # Hardcoded Information
-DRIVE_CREDENTIALS_PATH = 'path/to/drive/credentials.json'  # Update with your Google Drive credentials file path
-YOUTUBE_CREDENTIALS_PATH = 'path/to/youtube/client_secrets.json'  # Update with your YouTube client secrets file path
+DRIVE_CREDENTIALS_PATH = 'credentials.json'  # Update with your Google Drive credentials file path
+YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'  # Update with your YouTube client secrets file path
 SOURCE_FOLDER_ID = 'your_source_folder_id'  # Update with the source folder ID in Google Drive
 DESTINATION_FOLDER_ID = 'your_destination_folder_id'  # Update with the destination folder ID in Google Drive
 TAGS = ["tag1", "tag2", "tag3"]  # Update with relevant YouTube tags
