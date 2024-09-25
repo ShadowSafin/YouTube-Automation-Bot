@@ -4,7 +4,7 @@
   "description": "YouTube automation project",
   "main": "index.js",
   "engines": {
-    "node": ">=16.x <=18.x"
+    "node": ">=16.x <19.x"  // Specifies Node.js versions from 16.x up to (but not including) 19.x
   },
   "dependencies": {},
   "devDependencies": {},
