@@ -11,11 +11,11 @@ You must rename the file according to the upper instruction. Renaming it will no
 # Getting GDrive API Oauth Client ID 
 Go to your google cloud console and enable Google Drive API, then follow the official google documentation - https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
 
-Make Sure add "http://localhost:80" as authorised JavaScript Origins and "http://localhost:80/oauth2callback" + "http://localhost:80/" as authorised redirect urls.
+Make Sure add "http://localhost:8080" as authorised JavaScript Origins and "http://localhost:8080/oauth2callback" + "http://localhost:8080/" as authorised redirect urls.
 
 # Getting YouTube Data V3 API client secret
 Go to your google cloud console and enable YouTuve Data v3 API, then follow the official google documentation - https://developers.google.com/youtube/v3/guides/auth/installed-apps#uwp
 
-Make Sure add "http://localhost:80" as authorised JavaScript Origins and "http://localhost:80/oauth2callback" + "http://localhost:80/" as authorised redirect urls.
+Make Sure add "http://localhost:8080" as authorised JavaScript Origins and "http://localhost:8080/oauth2callback" + "http://localhost:8080/" as authorised redirect urls.
 
 
