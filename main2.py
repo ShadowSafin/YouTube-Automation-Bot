@@ -8,29 +8,29 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 
-# If modifying these SCOPES, delete the file token.json.
+# If modifying these SCOPES, delete the files token_drive.json and token_youtube.json.
 DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive']
 YOUTUBE_SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 # Hardcoded Information
-DRIVE_CREDENTIALS_PATH = 'credentials.json'  # Update with your Google Drive credentials file path
-YOUTUBE_CREDENTIALS_PATH = 'client_secrets.json'  # Update with your YouTube client secrets file path
-SOURCE_FOLDER_ID = 'Source_Folder_ID'  # Update with the source folder ID in Google Drive
-DESTINATION_FOLDER_ID = 'Destination_Folder_ID'  # Update with the destination folder ID in Google Drive
+DRIVE_CREDENTIALS_PATH = '/home/AbrarSafin/YouTubeAutomation/credentials.json'  # Update with your Google Drive credentials file path
+YOUTUBE_CREDENTIALS_PATH = '/home/AbrarSafin/YouTubeAutomation/client_secrets.json'  # Update with your YouTube client secrets file path
+SOURCE_FOLDER_ID = '1qfYtd0yZgDTjJ2UKimfJQgSWVd4AtOl_'  # Update with the source folder ID in Google Drive
+DESTINATION_FOLDER_ID = '1DnpkK1rT3YhmwRHwhEFf94tCyz_AL_7s'  # Update with the destination folder ID in Google Drive
 TAGS = ["tag1", "tag2", "tag3"]  # Update with relevant YouTube tags
 
 # Function to authenticate and get Google Drive service
 def authenticate_google_drive(drive_credentials_path):
     creds = None
-    if os.path.exists('token_drive.json'):
-        creds = Credentials.from_authorized_user_file('token_drive.json', DRIVE_SCOPES)
+    if os.path.exists('/home/AbrarSafin/YouTubeAutomation/token_drive.json'):
+        creds = Credentials.from_authorized_user_file('/home/AbrarSafin/YouTubeAutomation/token_drive.json', DRIVE_SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(drive_credentials_path, DRIVE_SCOPES)
-            creds = flow.run_local_server(port=80)
-        with open('token_drive.json', 'w') as token:
+            creds = flow.run_local_server(port=8080)
+        with open('/home/AbrarSafin/YouTubeAutomation/token_drive.json', 'w') as token:
             token.write(creds.to_json())
     
     service = build('drive', 'v3', credentials=creds)
@@ -39,15 +39,15 @@ def authenticate_google_drive(drive_credentials_path):
 # Function to authenticate and get YouTube service
 def authenticate_youtube(youtube_credentials_path):
     creds = None
-    if os.path.exists('token_youtube.json'):
-        creds = Credentials.from_authorized_user_file('token_youtube.json', YOUTUBE_SCOPES)
+    if os.path.exists('/home/AbrarSafin/YouTubeAutomation/token_youtube.json'):
+        creds = Credentials.from_authorized_user_file('/home/AbrarSafin/YouTubeAutomation/token_youtube.json', YOUTUBE_SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(youtube_credentials_path, YOUTUBE_SCOPES)
-            creds = flow.run_local_server(port=80)
-        with open('token_youtube.json', 'w') as token:
+            creds = flow.run_local_server(port=8080)
+        with open('/home/AbrarSafin/YouTubeAutomation/token_youtube.json', 'w') as token:
             token.write(creds.to_json())
     
     service = build('youtube', 'v3', credentials=creds)
@@ -100,7 +100,7 @@ def upload_video_to_youtube(service, video_file_path, title, description, tags):
             'title': title,  # Title set as cleaned file name
             'description': description,  # Description set as the cleaned file name
             'tags': tags,
-            'categoryId': '22'  # Category ID for People & Blogs
+            'categoryId': '24'  # Category ID for People & Blogs
         },
         'status': {
             'privacyStatus': 'public',
@@ -159,7 +159,7 @@ def main():
             else:
                 print(f"An error occurred: {e}")
 
-        # Wait for 20 seconds after the video is uploaded
+        # Wait for 10 seconds after the video is uploaded
         print("Waiting for 10 seconds after upload...")
         time.sleep(10)
 
