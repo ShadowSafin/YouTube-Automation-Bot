@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Uploader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+        }
+
+        .form-check-label {
+            font-size: 1rem;
+        }
+
+        .btn-primary, .btn-success {
+            margin-top: 10px;
+        }
+
+        #logs {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #log-content {
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .alert {
+            font-size: 1rem;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .alert-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .alert-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center mb-4">YouTube Video Uploader</h1>
+
+        <!-- Authentication Forms -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Authenticate Google Services</h5>
+            </div>
+            <div class="card-body">
+                <form action="/authenticate_drive" method="POST">
+                    <button type="submit" class="btn btn-primary w-100">Authenticate Google Drive</button>
+                </form>
+                <form action="/authenticate_youtube" method="POST" class="mt-3">
+                    <button type="submit" class="btn btn-primary w-100">Authenticate YouTube</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Video Upload Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Upload Video to YouTube</h5>
+            </div>
+            <div class="card-body">
+                <form action="/upload_video" method="POST">
+                    <div class="mb-3">
+                        <label for="source_folder_id" class="form-label">Source Folder ID (Google Drive)</label>
+                        <input type="text" class="form-control" id="source_folder_id" name="source_folder_id" placeholder="Enter Source Folder ID" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="destination_folder_id" class="form-label">Destination Folder ID (Google Drive)</label>
+                        <input type="text" class="form-control" id="destination_folder_id" name="destination_folder_id" placeholder="Enter Destination Folder ID" required>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cleanup" name="cleanup">
+                        <label class="form-check-label" for="cleanup">Clean up file name for YouTube title</label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" id="loop" name="loop">
+                        <label class="form-check-label" for="loop">Loop until no more files found</label>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label for="interval" class="form-label">Interval (in seconds)</label>
+                        <input type="number" class="form-control" id="interval" name="interval" placeholder="Enter interval" value="0">
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Upload Video</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Logs Section -->
+        <div id="logs" class="card">
+            <div class="card-header">
+                <h5>Logs</h5>
+            </div>
+            <div class="card-body">
+                <div id="log-content"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function fetchLogs() {
+            fetch('/logs')
+                .then(response => response.json())
+                .then(data => {
+                    const logContent = document.getElementById('log-content');
+                    logContent.innerHTML = '';
+                    data.logs.forEach(log => {
+                        const logEntry = document.createElement('p');
+                        logEntry.textContent = log;
+                        logContent.appendChild(logEntry);
+                    });
+                    logContent.scrollTop = logContent.scrollHeight;
+                })
+                .catch(error => console.error('Error fetching logs:', error));
+        }
+
+        setInterval(fetchLogs, 2000);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
