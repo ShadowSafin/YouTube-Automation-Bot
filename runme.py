@@ -126,7 +126,7 @@ def upload_video_to_youtube(service, video_file_path, title, description, tags):
             'title': title,
             'description': description,
             'tags': tags,
-            'categoryId': '22'  # Category ID for People & Blogs
+            'categoryId': '24'  # Category ID for People & Blogs
         },
         'status': {
             'privacyStatus': 'public',
