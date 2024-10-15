@@ -36,6 +36,6 @@ Make Sure add "http://localhost:8080" as authorised JavaScript Origins and "http
 # Getting YouTube Data V3 API client secret
 Go to your google cloud console and enable YouTuve Data v3 API, then follow the official google documentation - https://developers.google.com/youtube/v3/guides/auth/installed-apps#uwp
 
-Make Sure add "http://localhost:8080" as authorised JavaScript Origins and "http://localhost:8080/oauth2callback" + "http://localhost:8080/" as authorised redirect urls.
+Make Sure add "http://localhost:8081" as authorised JavaScript Origins and "http://localhost:8081/oauth2callback" + "http://localhost:8081/" as authorised redirect urls.
 
 
