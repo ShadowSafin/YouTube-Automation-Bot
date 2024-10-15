@@ -28,7 +28,7 @@ You must rename the file according to the upper instruction. Renaming it will no
 # Folder ID
 (Source_File_ID) and (Destination_Folder_ID) should be changed with your desired folder id.
 
-# Getting GDrive API Oauth Client ID 
+# Getting GDrive API Oauth Client Secret 
 Go to your google cloud console and enable Google Drive API, then follow the official google documentation - https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
 
 Make Sure add "http://localhost:8080" as authorised JavaScript Origins and "http://localhost:8080/oauth2callback" + "http://localhost:8080/" as authorised redirect urls.
