@@ -22,7 +22,7 @@ If you are new to python or have no experience in python then use this method- R
 # Authentication (Method 2)
 If you are experienced in python or have experience with google drive + YouTube data v3 API, then go for this method =
 
-To make the script work add the Google drive API OAuth2.0 file as "credentials.json" and YouTube data v3 API client secret as "client_secret.json" in the folder.
+Add Google drive API OAuth2.0 file as "credentials.json" and YouTube data v3 API client secret as "client_secret.json" in the main folder.
 
 You must rename the file according to the upper instruction. Renaming it will not chance anything in the file.
 # Folder ID
