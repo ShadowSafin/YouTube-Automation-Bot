@@ -2,7 +2,7 @@
 This is a python script that could randomly take a file from a Google Drive folder and upload it to YouTube with the file name as title and description. After upload it will move the file to another folder to avoid reuploading.
 
 # How to run Run 
-Setup you could downlaod the setup from SETUP folder and install it.
+For the easy way you could downlaod the setup from SETUP folder and install it.
 
 If you want to run the code then 
 ```Python
