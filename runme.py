@@ -22,6 +22,26 @@ def get_resource_path(relative_path):
         base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
 
+# Define the function to move a file to another folder
+def move_file_to_another_folder(service, file_id, destination_folder_id):
+    """Move a file to another folder in Google Drive."""
+    # Create a request to move the file
+    file_metadata = {
+        'addParents': destination_folder_id,
+        'removeParents': 'root'  # Optionally, specify the current parent folder ID to remove
+    }
+
+    try:
+        service.files().update(
+            fileId=file_id,
+            addParents=destination_folder_id,
+            removeParents='root',  # Change this if needed to specify the current parent
+            fields='id, parents'
+        ).execute()
+    except Exception as e:
+        logs.append(f"Error moving file: {str(e)}")
+
+
 # Reinitialize Flask app with dynamic template and static folder paths
 def get_template_folder():
     if hasattr(sys, '_MEIPASS'):  # Check if running in a bundled executable
@@ -108,25 +128,26 @@ def get_random_file(service, folder_id):
     return None
 
 # Function to move file to another folder
-def move_file_to_another_folder(service, file_id, destination_folder_id):
-    file = service.files().get(fileId=file_id).execute()
-    previous_parents = ",".join(file.get('parents'))
-    service.files().update(
-        fileId=file_id,
-        addParents=destination_folder_id,
-        removeParents=previous_parents,
-        fields='id, parents'
-    ).execute()
-
-# Function to upload video to YouTube
 def upload_video_to_youtube(service, video_file_path, title, description, tags):
     global upload_progress
+
+    # Ensure that tags is a list, even if it's None or a string
+    if tags is None:
+        tags = []
+    elif isinstance(tags, str):
+        tags = [tags]  # Convert single string into a list
+    elif not isinstance(tags, list):
+        raise ValueError(f"Unexpected type for tags: {type(tags)}. Expected None, str, or list.")
+
+    # Ensure that tags is a list of strings only
+    tags = [tag for tag in tags if isinstance(tag, str)]
+
     body = {
         'snippet': {
             'title': title,
             'description': description,
             'tags': tags,
-            'categoryId': '24'  # Category ID for People & Blogs
+            'categoryId': '22'  # Category ID for People & Blogs
         },
         'status': {
             'privacyStatus': 'public',
@@ -184,6 +205,10 @@ def upload_video():
     cleanup = request.form.get('cleanup') == 'on'
     loop = request.form.get('loop') == 'true'
     interval = int(request.form.get('interval') or 0)
+
+     # Get tags input and convert to a list
+    tags_input = request.form.get('tags')
+    tags = [tag.strip() for tag in tags_input.split(',')] if tags_input else []
 
     # Flash message immediately to notify the user that the upload has started
     flash("Upload started...", "info")
@@ -244,7 +269,7 @@ def get_logs():
 
 if __name__ == '__main__':
     # Start the Flask app in a new thread
-    threading.Thread(target=lambda: app.run(debug=True, use_reloader=False)).start()
+    threading.Thread(target=lambda: app.run(debug=False, use_reloader=False)).start()
     
     # Give the server a moment to start
     time.sleep(1)
