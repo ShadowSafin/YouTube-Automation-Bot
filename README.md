@@ -9,13 +9,10 @@ Make sure to Add - "Google drive API OAuth2.0 file as "credentials.json" and You
 After adding the client secrets open package.bat file and wait for the process to finish. Now go to "Dist" folder and tap on YouTubeAutomation. The program will open as it is intended.
 
 # Authentication (Method 1)
-If you are experienced in python or have experience with google drive + YouTube data v3 API, then go for this method =
 
 Add Google drive API OAuth2.0 file as "credentials.json" and YouTube data v3 API client secret as "client_secret.json" in the main folder.
 
 You must rename the file according to the upper instruction. Renaming it will not chance anything in the file.
-# Folder ID
-(Source_File_ID) and (Destination_Folder_ID) should be changed with your desired folder id.
 
 # Getting GDrive API Oauth Client Secret 
 Go to your google cloud console and enable Google Drive API, then follow the official google documentation - https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
