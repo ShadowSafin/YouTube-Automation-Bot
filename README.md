@@ -8,10 +8,7 @@ Make sure to Add - "Google drive API OAuth2.0 file as "credentials.json" and You
 
 After adding the client secrets open package.bat file and wait for the process to finish. Now go to "Dist" folder and tap on YouTubeAutomation. The program will open as it is intended.
 
-# Authentication (Method 1) 
-If you are new to python or have no experience in python then use this method- Run the runme.py file and go to the webpage and click google drive authentication then YouTube authentication, allow the access and you are good to go. PLEASE REMEBER THIS METHOD MIGHT HAVE A QUOTA EXCEEDING ERROR.
-
-# Authentication (Method 2)
+# Authentication (Method 1)
 If you are experienced in python or have experience with google drive + YouTube data v3 API, then go for this method =
 
 Add Google drive API OAuth2.0 file as "credentials.json" and YouTube data v3 API client secret as "client_secret.json" in the main folder.
