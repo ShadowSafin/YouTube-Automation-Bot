@@ -2,19 +2,11 @@
 This is a python script that could randomly take a file from a Google Drive folder and upload it to YouTube with the file name as title and description. After upload it will move the file to another folder to avoid reuploading.
 
 # How to run Run 
-For the easy way you could downlaod the setup from SETUP folder and install it.
+Add your own google drive API client secret and YouTube Data V3 API Client secret in the directory. Replace the already existing client secrets. 
 
-If you want to run the code then 
-```Python
-pip install -r requirements.txt
-```
-```Python
-cd path_to_folder 
-```
-```Python
-python runme.py
-```
-After the code is run you will automatically be redirected to the browser and to the webpage. Follow the step in the webpage to complete the process.
+Make sure to Add - "Google drive API OAuth2.0 file as "credentials.json" and YouTube data v3 API client secret as "client_secret.json" in the main folder".
+
+After adding the client secrets open package.bat file and wait for the process to finish. Now go to "Dist" folder and tap on YouTubeAutomation. The program will open as it is intended.
 
 # Authentication (Method 1) 
 If you are new to python or have no experience in python then use this method- Run the runme.py file and go to the webpage and click google drive authentication then YouTube authentication, allow the access and you are good to go. PLEASE REMEBER THIS METHOD MIGHT HAVE A QUOTA EXCEEDING ERROR.
